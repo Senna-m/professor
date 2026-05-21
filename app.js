@@ -38,22 +38,22 @@ const NOTAS = [
 let grupos = [
   {
     nome: 'Trio 1',
-    metodo: 'Método de Hoffman',
-    membros: 'Ana, João e Carlos',
+    metodo: 'Método de Hoffman,Pons e Janer',
+    membros: 'Ruth',
     notas: {},
     obs: ''
   },
   {
     nome: 'Trio 2',
-    metodo: 'Método de Ritchie',
-    membros: 'Maria, Pedro e Lucas',
+    metodo: 'Método de Ritchie (MIFC/Blagg)',
+    membros: '',
     notas: {},
     obs: ''
   },
   {
     nome: 'Trio 3',
-    metodo: 'Método de Baermann',
-    membros: 'Julia, Rafael e Bruno',
+    metodo: 'Método Faust',
+    membros: '',
     notas: {},
     obs: ''
   }
