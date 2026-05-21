@@ -185,8 +185,18 @@ function abrirGrupo(i) {
   document.getElementById('av-nome').textContent = g.nome;
   document.getElementById('av-metodo').textContent = g.metodo;
 
-  document.getElementById('av-membros').textContent =
-    g.membros || '';
+  const membrosEl = document.getElementById('av-membros');
+
+  membrosEl.innerHTML = `
+    <input
+      type="text"
+      id="input-membros"
+      class="input-membros"
+      placeholder="Digite os integrantes"
+      value="${g.membros || ''}"
+      oninput="atualizarMembros(this.value)"
+    >
+  `;
 
   document.getElementById('obs-input').value = g.obs || '';
 
@@ -235,10 +245,13 @@ function calcTotal() {
   document.getElementById('av-total').textContent = numBR(t);
 }
 
+function atualizarMembros(valor) {
+  grupos[grupoAtual].membros = valor;
+}
+
 function salvarGrupo() {
   grupos[grupoAtual].obs = document.getElementById('obs-input').value;
-  irGrupos();
-}
+  ir
 
 // ── Tela 3: resultados ───────────────────────────────────────────────────────
 function verResultados() {
@@ -325,4 +338,5 @@ function fallbackCopiar(texto) {
 // ── Init ─────────────────────────────────────────────────────────────────────
 renderGrupos();
 renderSteps('tela-grupos');
+
 
