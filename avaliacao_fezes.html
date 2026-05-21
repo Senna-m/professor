@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avaliação — Análise de Fezes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="top-bar">
+      <div>
+        <div class="app-title">Avaliação — Análise de Fezes</div>
+        <div class="app-sub">3,0 pontos · trios</div>
+      </div>
+      <div class="step-indicator" id="steps"></div>
+    </div>
+
+    <!-- TELA 1: GRUPOS -->
+    <div class="screen visible" id="tela-grupos">
+      <div class="screen-hint">Selecione o grupo para avaliar:</div>
+      <div id="lista-grupos"></div>
+      <button class="btn-dashed" onclick="addGrupo()">+ Adicionar grupo</button>
+    </div>
+
+    <!-- TELA 2: AVALIAÇÃO -->
+    <div class="screen" id="tela-avaliacao">
+      <div class="av-header">
+        <div>
+          <div class="av-nome" id="av-nome"></div>
+          <div class="av-metodo" id="av-metodo"></div>
+        </div>
+        <div class="av-total-wrap">
+          <div class="av-total" id="av-total">0,0</div>
+          <div class="av-total-label">/ 3,0</div>
+        </div>
+      </div>
+      <div id="criterios-lista"></div>
+      <div class="obs-wrap">
+        <div class="obs-label">Observações</div>
+        <textarea id="obs-input" class="obs-area" placeholder="Pontos fortes, aspectos a melhorar..."></textarea>
+      </div>
+      <div class="nav-row">
+        <button class="btn-secondary" onclick="irGrupos()">← Voltar</button>
+        <button class="btn-primary" onclick="salvarGrupo()">Salvar avaliação</button>
+      </div>
+    </div>
+
+    <!-- TELA 3: RESULTADOS -->
+    <div class="screen" id="tela-resultados">
+      <div class="screen-title">Resultados</div>
+      <div id="resultados-lista"></div>
+      <div class="nav-row">
+        <button class="btn-secondary" onclick="irGrupos()">← Grupos</button>
+        <button class="btn-success" onclick="exportar()">⬇ Copiar resultado</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
