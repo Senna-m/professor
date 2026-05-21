@@ -1,4 +1,3 @@
-```javascript
 // ── Dados dos critérios ──────────────────────────────────────────────────────
 const CRITERIOS = [
   {
@@ -326,4 +325,4 @@ function fallbackCopiar(texto) {
 // ── Init ─────────────────────────────────────────────────────────────────────
 renderGrupos();
 renderSteps('tela-grupos');
-```
+
