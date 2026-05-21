@@ -1,3 +1,4 @@
+```javascript
 // ── Dados dos critérios ──────────────────────────────────────────────────────
 const CRITERIOS = [
   {
@@ -36,10 +37,29 @@ const NOTAS = [
 
 // ── Estado inicial ───────────────────────────────────────────────────────────
 let grupos = [
-  { nome: 'Trio 1', metodo: 'Método de Hoffman',   notas: {}, obs: '' },
-  { nome: 'Trio 2', metodo: 'Método de Ritchie',   notas: {}, obs: '' },
-  { nome: 'Trio 3', metodo: 'Método de Baermann',  notas: {}, obs: '' }
+  {
+    nome: 'Trio 1',
+    metodo: 'Método de Hoffman',
+    membros: 'Ana, João e Carlos',
+    notas: {},
+    obs: ''
+  },
+  {
+    nome: 'Trio 2',
+    metodo: 'Método de Ritchie',
+    membros: 'Maria, Pedro e Lucas',
+    notas: {},
+    obs: ''
+  },
+  {
+    nome: 'Trio 3',
+    metodo: 'Método de Baermann',
+    membros: 'Julia, Rafael e Bruno',
+    notas: {},
+    obs: ''
+  }
 ];
+
 let grupoAtual = 0;
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
@@ -48,9 +68,9 @@ function totalGrupo(g) {
 }
 
 function faixa(total) {
-  if (total >= 2.4) return { txt: 'Excelente',    cls: 'faixa-e' };
+  if (total >= 2.4) return { txt: 'Excelente', cls: 'faixa-e' };
   if (total >= 1.6) return { txt: 'Satisfatório', cls: 'faixa-s' };
-  return               { txt: 'Insuficiente',  cls: 'faixa-i' };
+  return { txt: 'Insuficiente', cls: 'faixa-i' };
 }
 
 function numBR(n) {
@@ -62,6 +82,7 @@ function mostrarTela(id) {
   document.querySelectorAll('.screen').forEach(el => {
     el.classList.toggle('visible', el.id === id);
   });
+
   renderSteps(id);
 }
 
@@ -74,10 +95,13 @@ function irGrupos() {
 function renderSteps(telaAtiva) {
   const telas = ['tela-grupos', 'tela-avaliacao', 'tela-resultados'];
   const idx = telas.indexOf(telaAtiva);
+
   document.getElementById('steps').innerHTML = telas.map((_, i) => {
     let cls = 'step-dot';
-    if (i === idx)  cls += ' active';
-    if (i < idx)    cls += ' done';
+
+    if (i === idx) cls += ' active';
+    if (i < idx) cls += ' done';
+
     return `<div class="${cls}"></div>`;
   }).join('');
 }
@@ -85,13 +109,15 @@ function renderSteps(telaAtiva) {
 // ── Tela 1: lista de grupos ──────────────────────────────────────────────────
 function renderGrupos() {
   const el = document.getElementById('lista-grupos');
+
   el.innerHTML = grupos.map((g, i) => {
-    const tot   = totalGrupo(g);
-    const qtd   = Object.keys(g.notas).length;
+    const tot = totalGrupo(g);
+    const qtd = Object.keys(g.notas).length;
     const feito = qtd === CRITERIOS.length;
-    const parc  = qtd > 0 && !feito;
+    const parc = qtd > 0 && !feito;
 
     let badgeHtml;
+
     if (feito) {
       badgeHtml = `<span class="badge badge-ok">✓ ${numBR(tot)} pts</span>`;
     } else if (parc) {
@@ -108,38 +134,63 @@ function renderGrupos() {
       </div>`;
   }).join('');
 
-  // Botão de resultados aparece quando todos estão avaliados
   const btnAntigo = document.getElementById('btn-ver-resultados');
+
   if (btnAntigo) btnAntigo.remove();
 
   const todosFeitos = grupos.every(g => Object.keys(g.notas).length === CRITERIOS.length);
+
   if (todosFeitos) {
     const btn = document.createElement('button');
-    btn.id        = 'btn-ver-resultados';
+
+    btn.id = 'btn-ver-resultados';
     btn.className = 'btn-results';
     btn.textContent = '📊 Ver resultados';
-    btn.onclick   = verResultados;
+    btn.onclick = verResultados;
+
     el.after(btn);
   }
 }
 
 function addGrupo() {
-  const n    = grupos.length + 1;
-  const nome = prompt(`Nome do grupo:`, `Trio ${n}`);
-  if (!nome || !nome.trim()) return;
-  const met  = prompt('Método que vão apresentar:', 'Método de Willis');
-  if (!met  || !met.trim())  return;
-  grupos.push({ nome: nome.trim(), metodo: met.trim(), notas: {}, obs: '' });
+  const n = grupos.length + 1;
+
+  const nome = prompt('Nome do grupo:', `Trio ${n}`);
+  if (!nome?.trim()) return;
+
+  const met = prompt('Método que vão apresentar:', 'Método de Willis');
+  if (!met?.trim()) return;
+
+  const membros = prompt(
+    'Nome dos integrantes:',
+    'Aluno 1, Aluno 2, Aluno 3'
+  );
+
+  grupos.push({
+    nome: nome.trim(),
+    metodo: met.trim(),
+    membros: membros ? membros.trim() : '',
+    notas: {},
+    obs: ''
+  });
+
   renderGrupos();
 }
 
 // ── Tela 2: avaliação de um grupo ────────────────────────────────────────────
 function abrirGrupo(i) {
   grupoAtual = i;
+
   const g = grupos[i];
-  document.getElementById('av-nome').textContent   = g.nome;
+
+  document.getElementById('av-nome').textContent = g.nome;
   document.getElementById('av-metodo').textContent = g.metodo;
-  document.getElementById('obs-input').value        = g.obs || '';
+
+  document.getElementById('av-membros').textContent =
+    g.membros || '';
+
+  document.getElementById('obs-input').value = g.obs || '';
+
   renderCriterios();
   calcTotal();
   mostrarTela('tela-avaliacao');
@@ -147,13 +198,16 @@ function abrirGrupo(i) {
 
 function renderCriterios() {
   const g = grupos[grupoAtual];
+
   document.getElementById('criterios-lista').innerHTML = CRITERIOS.map(c => `
     <div class="criterio-bloco" id="bloco-${c.id}">
       <div class="criterio-label">${c.nome}</div>
       <div class="criterio-hint">${c.hint}</div>
+
       <div class="botoes-nota">
         ${NOTAS.map(n => {
           const selecionado = g.notas[c.id] === n.val ? ` ${n.cls}` : '';
+
           return `<button class="btn-nota${selecionado}"
                     onclick="setNota('${c.id}', ${n.val}, '${n.cls}', this)">
                     ${n.label}
@@ -165,11 +219,15 @@ function renderCriterios() {
 
 function setNota(cid, val, cls, btn) {
   grupos[grupoAtual].notas[cid] = val;
-  // Resetar todos os botões do bloco
-  btn.closest('.botoes-nota').querySelectorAll('.btn-nota').forEach(b => {
-    b.className = 'btn-nota';
-  });
+
+  btn.closest('.botoes-nota')
+    .querySelectorAll('.btn-nota')
+    .forEach(b => {
+      b.className = 'btn-nota';
+    });
+
   btn.className = `btn-nota ${cls}`;
+
   calcTotal();
 }
 
@@ -186,17 +244,21 @@ function salvarGrupo() {
 // ── Tela 3: resultados ───────────────────────────────────────────────────────
 function verResultados() {
   const el = document.getElementById('resultados-lista');
+
   el.innerHTML = grupos.map(g => {
     const tot = totalGrupo(g);
-    const f   = faixa(tot);
+    const f = faixa(tot);
+
     const detalhes = CRITERIOS.map(c =>
       `<span class="badge badge-vazio" style="font-size:11px">
          ${c.nome.split(' ')[0]}: ${numBR(g.notas[c.id] || 0)}
        </span>`
     ).join('');
+
     const obsHtml = g.obs
       ? `<div class="result-obs">${g.obs}</div>`
       : '';
+
     return `
       <div class="result-card">
         <div class="result-header">
@@ -205,24 +267,34 @@ function verResultados() {
             <div class="result-met">${g.metodo}</div>
             <div class="result-faixa ${f.cls}">${f.txt}</div>
           </div>
+
           <div class="result-nota">${numBR(tot)}<span>/3,0</span></div>
         </div>
+
         <div class="result-detalhe">${detalhes}</div>
         ${obsHtml}
       </div>`;
   }).join('');
+
   mostrarTela('tela-resultados');
 }
 
 function exportar() {
   const linhas = grupos.map(g => {
     const tot = totalGrupo(g);
-    const f   = faixa(tot);
-    const det = CRITERIOS.map(c => `${c.nome}: ${numBR(g.notas[c.id] || 0)}`).join(' | ');
+    const f = faixa(tot);
+
+    const det = CRITERIOS.map(c =>
+      `${c.nome}: ${numBR(g.notas[c.id] || 0)}`
+    ).join(' | ');
+
     let linha = `${g.nome} — ${g.metodo}\nNota: ${numBR(tot)}/3,0 (${f.txt})\n${det}`;
+
     if (g.obs) linha += `\nObs: ${g.obs}`;
+
     return linha;
   });
+
   const texto = linhas.join('\n\n─────────────────────\n\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -236,16 +308,22 @@ function exportar() {
 
 function fallbackCopiar(texto) {
   const ta = document.createElement('textarea');
+
   ta.value = texto;
   ta.style.position = 'fixed';
-  ta.style.opacity  = '0';
+  ta.style.opacity = '0';
+
   document.body.appendChild(ta);
+
   ta.select();
   document.execCommand('copy');
+
   document.body.removeChild(ta);
+
   alert('Resultado copiado!');
 }
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 renderGrupos();
 renderSteps('tela-grupos');
+```
